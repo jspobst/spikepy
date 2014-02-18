@@ -239,14 +239,14 @@ class ProcessManager(object):
 
         return task_index, results_index
 
-    def open_file(self, fullpath):
+    def open_file(self, fullpath, **kwargs):
         '''
             Open a single data file. Returns the list of trials created.
         '''
-        return self.open_files([fullpath])[0]
+        return self.open_files([fullpath], **kwargs)[0]
 
     @supports_callbacks
-    def open_files(self, fullpaths):
+    def open_files(self, fullpaths, **kwargs):
         '''
             Open a multiple data files. Returns a list of 
         'list of trials created'.
@@ -254,7 +254,8 @@ class ProcessManager(object):
         file_interpreters = plugin_manager.file_interpreters
         if len(fullpaths) == 1:
             try:
-                results = open_data_file(fullpaths[0], file_interpreters)
+                results = open_data_file(fullpaths[0], file_interpreters, 
+                        **kwargs)
             except:
                 results = []
                 traceback.print_exc()

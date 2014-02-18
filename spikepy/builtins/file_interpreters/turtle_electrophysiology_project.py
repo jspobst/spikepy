@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import gzip
 import cPickle
 import os
+import numpy
 
 from spikepy.developer.file_interpreter import FileInterpreter, Trial
 
@@ -31,14 +32,22 @@ class TurtleElectrophysiologyProject(FileInterpreter):
         self.priority = 10 
         self.description = '''An archived Turtle Electrophysiology Project file.'''
 
-    def read_data_file(self, fullpath):
+    def read_data_file(self, fullpath, trodes='all'):
         if fullpath.endswith('.gz'):
             infile = gzip.open(fullpath, 'rb')
         else:
             infile = open(fullpath, 'rb')
         data = cPickle.load(infile)
-        voltage_traces = data['voltage_traces']
+        if trodes is 'all':
+            voltage_traces = data['voltage_traces']
+        else:
+            vtrace_arrays = []
+            all_voltage_traces = data['voltage_traces']
+            for i in trodes:
+                vtrace_arrays.append(all_voltage_traces[i])
+            voltage_traces = numpy.vstack(vtrace_arrays) 
         sampling_freq = data['sampling_freq']
+        infile.close()
 
         if len(voltage_traces) == 16:
             voltage_traces = voltage_traces[[i-1 for i in SHANK_CHANNEL_INDEX]]

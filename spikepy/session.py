@@ -65,14 +65,14 @@ class Session(object):
         """Load session from a file."""
         return self.open_file(filename)
 
-    def open_file(self, fullpath):
+    def open_file(self, fullpath, **kwargs):
         """Open file located at fullpath."""
-        return self.process_manager.open_file(fullpath)
+        return self.process_manager.open_file(fullpath, **kwargs)
 
     @supports_callbacks
-    def open_files(self, fullpaths):
+    def open_files(self, fullpaths, **kwargs):
         """Open the files located at fullpaths"""
-        return self.process_manager.open_files(fullpaths)
+        return self.process_manager.open_files(fullpaths, **kwargs)
 
     def save(self, filename, gzipped=True):
         """Save this session."""
@@ -130,7 +130,7 @@ class Session(object):
         """Remove all currently marked trials."""
         results = []
         for trial in self.marked_trials:
-            results.append(self.remove_trial(self.marked_trials))
+            results.append(self.remove_trial(trial.trial_id))
         return results
 
     @supports_callbacks

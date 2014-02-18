@@ -19,7 +19,7 @@ import sys
 import os
 from spikepy.common.errors import *
 
-def open_data_file(fullpath, file_interpreters):
+def open_data_file(fullpath, file_interpreters, **kwargs):
     """
     Open a datafile given the <fullpath> and a list of <file_interpreters>.
     """
@@ -28,7 +28,7 @@ def open_data_file(fullpath, file_interpreters):
     exception_info_list = []
     for fi in file_interpreters:
         try:
-            return fi.read_data_file(fullpath)
+            return fi.read_data_file(fullpath, **kwargs)
         except:
             exception_info_list.append((fi, sys.exc_info()))
 
